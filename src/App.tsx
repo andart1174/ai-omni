@@ -126,7 +126,6 @@ export default function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [threeDSettings, setThreeDSettings] = useState<threeD.ThreeDSettings>({ zScale: 4, res: 100, invert: false });
   const [webUrl, setWebUrl] = useState('https://google.com');
-  const [cyberInput, setCyberInput] = useState('');
   const [analyticsCsv, setAnalyticsCsv] = useState('January,40\nFebruary,80\nMarch,60\nApril,120');
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
