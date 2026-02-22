@@ -26,6 +26,11 @@ import * as mockup from './engine/mockupEngine';
 import * as social from './engine/socialEngine';
 import * as analytics from './engine/analyticsEngine';
 import * as cyber from './engine/cyberEngine';
+import * as vector from './engine/vectorEngine';
+import * as animation from './engine/animationEngine';
+import * as pdfMaster from './engine/pdfMasterEngine';
+import * as sprite from './engine/spriteEngine';
+import * as cleanup from './engine/cleanupEngine';
 import confetti from 'canvas-confetti';
 import * as THREE from 'three';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
@@ -121,7 +126,7 @@ export default function App() {
   const [processedFiles, setProcessedFiles] = useState<ProcessedFile[]>([]);
   const [selectedFormat, setSelectedFormat] = useState<any>('webp');
   const [activeFile, setActiveFile] = useState<ProcessedFile | null>(null);
-  const [activeTab, setActiveTab] = useState<'media' | 'video' | 'viral' | 'print' | 'audio' | 'security' | 'ai' | 'data' | 'dev' | 'design' | 'threeD' | 'magic' | 'brand' | 'document' | 'web' | 'mockup' | 'social' | 'analytics' | 'cyber'>('media');
+  const [activeTab, setActiveTab] = useState<'media' | 'video' | 'viral' | 'print' | 'audio' | 'security' | 'ai' | 'data' | 'dev' | 'design' | 'threeD' | 'magic' | 'brand' | 'document' | 'web' | 'mockup' | 'social' | 'analytics' | 'cyber' | 'vector' | 'animation' | 'pdfMaster' | 'sprite' | 'cleanup'>('media');
   const [conversionProgress, setConversionProgress] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [threeDSettings, setThreeDSettings] = useState<threeD.ThreeDSettings>({ zScale: 4, res: 100, invert: false });
@@ -201,6 +206,16 @@ export default function App() {
           resultUrl = await social.applySocialVibe(file, selectedFormat as any);
         } else if (activeTab === 'analytics') {
           resultUrl = await analytics.renderCsvChart(analyticsCsv);
+        } else if (activeTab === 'vector') {
+          resultUrl = await vector.generateLaserOptimizedPath(file);
+        } else if (activeTab === 'animation') {
+          resultUrl = await animation.animateKenBurns(file);
+        } else if (activeTab === 'pdfMaster') {
+          resultUrl = await pdfMaster.splitPDF(file, '1-2');
+        } else if (activeTab === 'sprite') {
+          resultUrl = await sprite.createSeamlessTile(file);
+        } else if (activeTab === 'cleanup') {
+          resultUrl = await cleanup.eraseObject(file, 50, 50, 100, 100);
         } else if (activeTab === 'cyber') {
           if (selectedFormat === 'ascii') {
             const ascii = await cyber.imageToAscii(file);
@@ -252,7 +267,7 @@ export default function App() {
             return 'image/jpeg';
           }
           if (tab === 'brand') return 'text/plain';
-          if (tab === 'cyber' || tab === 'analytics' || tab === 'mockup' || tab === 'social') return 'image/png';
+          if (tab === 'cyber' || tab === 'analytics' || tab === 'mockup' || tab === 'social' || tab === 'vector' || tab === 'animation' || tab === 'sprite' || tab === 'cleanup') return 'image/png';
           if (tab === 'data' && format === 'ocr') return 'text/plain';
           if (tab === 'dev' && format !== 'base64') return 'text/plain';
           if (tab === 'document') {
@@ -342,27 +357,32 @@ export default function App() {
           <p className="subtitle">The Ultimate Conversion Hub</p>
         </header>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px', marginBottom: '20px', padding: '4px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '2px', marginBottom: '20px', padding: '2px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}>
           {[
-            { id: 'media', icon: <ImageIcon size={14} />, label: 'Med' },
-            { id: 'video', icon: <Video size={14} />, label: 'Vid' },
-            { id: 'viral', icon: <Sparkles size={14} />, label: 'Vir' },
-            { id: 'print', icon: <Printer size={14} />, label: 'Prn' },
-            { id: 'audio', icon: <Music size={14} />, label: 'Aud' },
-            { id: 'security', icon: <ShieldCheck size={14} />, label: 'Sec' },
-            { id: 'ai', icon: <Wand2 size={14} />, label: 'AI' },
-            { id: 'threeD', icon: <Box size={14} />, label: '3D' },
-            { id: 'magic', icon: <WandSparkles size={14} />, label: 'Mag' },
-            { id: 'brand', icon: <QrCode size={14} />, label: 'QR' },
-            { id: 'document', icon: <Files size={14} />, label: 'Doc' },
-            { id: 'web', icon: <Globe size={14} />, label: 'Web' },
-            { id: 'mockup', icon: <Layout size={14} />, label: 'Mok' },
-            { id: 'social', icon: <Plus size={14} />, label: 'Soc' },
-            { id: 'analytics', icon: <Database size={14} />, label: 'Crt' },
-            { id: 'cyber', icon: <Code2 size={14} />, label: 'Hkr' },
-            { id: 'data', icon: <Database size={14} />, label: 'Dat' },
-            { id: 'dev', icon: <Code2 size={14} />, label: 'Dev' },
-            { id: 'design', icon: <Layout size={14} />, label: 'Des' }
+            { id: 'media', icon: <ImageIcon size={12} />, label: 'Med' },
+            { id: 'video', icon: <Video size={12} />, label: 'Vid' },
+            { id: 'viral', icon: <Sparkles size={12} />, label: 'Vir' },
+            { id: 'print', icon: <Printer size={12} />, label: 'Prn' },
+            { id: 'audio', icon: <Music size={12} />, label: 'Aud' },
+            { id: 'security', icon: <ShieldCheck size={12} />, label: 'Sec' },
+            { id: 'ai', icon: <Wand2 size={12} />, label: 'AI' },
+            { id: 'threeD', icon: <Box size={12} />, label: '3D' },
+            { id: 'magic', icon: <WandSparkles size={12} />, label: 'Mag' },
+            { id: 'brand', icon: <QrCode size={12} />, label: 'QR' },
+            { id: 'document', icon: <Files size={12} />, label: 'Doc' },
+            { id: 'web', icon: <Globe size={12} />, label: 'Web' },
+            { id: 'mockup', icon: <Layout size={12} />, label: 'Mok' },
+            { id: 'social', icon: <Plus size={12} />, label: 'Soc' },
+            { id: 'analytics', icon: <Database size={12} />, label: 'Crt' },
+            { id: 'cyber', icon: <Code2 size={12} />, label: 'Hkr' },
+            { id: 'vector', icon: <Wand2 size={10} />, label: 'Vec' },
+            { id: 'animation', icon: <Video size={10} />, label: 'Ani' },
+            { id: 'pdfMaster', icon: <Files size={10} />, label: 'Pdf' },
+            { id: 'sprite', icon: <Box size={10} />, label: 'Gme' },
+            { id: 'cleanup', icon: <Trash2 size={10} />, label: 'Cln' },
+            { id: 'data', icon: <Database size={10} />, label: 'Dat' },
+            { id: 'dev', icon: <Code2 size={10} />, label: 'Dev' },
+            { id: 'design', icon: <Layout size={10} />, label: 'Des' }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -372,18 +392,19 @@ export default function App() {
                   media: 'webp', video: 'mp4', viral: '9-16', print: 'card-85-55', audio: 'mp3',
                   security: 'strip', ai: 'bg-remove', threeD: 'stl-gen', magic: 'colorize',
                   brand: 'qr-art', document: 'pdf-merge', web: 'url-shot', mockup: 'iphone', social: 'vintage',
-                  analytics: 'bar-chart', cyber: 'ascii', data: 'ocr', dev: 'json-csv'
+                  analytics: 'bar-chart', cyber: 'ascii', vector: 'smooth', animation: 'ken-burns',
+                  pdfMaster: 'split', sprite: 'tile', cleanup: 'erase', data: 'ocr'
                 };
                 setSelectedFormat(defaultFormats[tab.id] || 'webp');
               }}
               style={{
-                padding: '10px 2px', borderRadius: '12px', border: 'none', cursor: 'pointer',
-                background: activeTab === tab.id ? 'var(--accent-primary)' : 'rgba(255,255,255,0.03)',
-                color: '#fff', fontSize: '9px', fontWeight: '800', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
-                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+                padding: '10px 0', borderRadius: '10px', border: 'none', cursor: 'pointer',
+                background: activeTab === tab.id ? 'var(--accent-primary)' : 'transparent',
+                color: '#fff', fontSize: '8px', fontWeight: '800', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px',
+                transition: 'all 0.2s ease', borderBottom: activeTab === tab.id ? '2px solid #fff' : 'none'
               }}
             >
-              <div style={{ transform: activeTab === tab.id ? 'scale(1.1)' : 'scale(1)' }}>{tab.icon}</div>
+              {tab.icon}
               {tab.label}
             </button>
           ))}
@@ -416,6 +437,11 @@ export default function App() {
                 social: ['vintage', 'cyberpunk', 'cinematic', 'bw', 'warm'],
                 analytics: ['bar-chart', 'csv-to-img'],
                 cyber: ['ascii', 'hash-gen', 'secure-scan'],
+                vector: ['smooth', 'laser-opt', 'cnc-path'],
+                animation: ['ken-burns', 'parallax', 'dolly-zoom'],
+                pdfMaster: ['split', 'protect', 'page-num'],
+                sprite: ['tile', 'strip-gen', 'atlas'],
+                cleanup: ['erase', 'restore-patch'],
                 data: ['ocr', 'excel-export', 'sign-doc'],
                 dev: ['json-csv', 'csv-json', 'xml-json', 'base64'],
                 design: ['button', 'input', 'card', 'login', 'navbar']
