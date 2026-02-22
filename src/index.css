@@ -1,0 +1,170 @@
+:root {
+  --bg-color: #050505;
+  --panel-bg: rgba(20, 20, 20, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --accent-primary: #007aff;
+  --accent-secondary: #5856d6;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1a1;
+  --drop-zone-bg: rgba(255, 255, 255, 0.03);
+  --drop-zone-active: rgba(0, 122, 255, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glassmorphism Classes */
+.glass {
+  background: var(--panel-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+}
+
+/* Layout */
+.app-container {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  height: 100%;
+  padding: 24px;
+  gap: 24px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+}
+
+.main-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Typography */
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #a1a1a1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Drop Zone */
+.drop-zone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--drop-zone-bg);
+  border: 2px dashed var(--glass-border);
+  border-radius: 32px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.drop-zone:hover,
+.drop-zone.active {
+  background: var(--drop-zone-active);
+  border-color: var(--accent-primary);
+  transform: scale(1.01);
+}
+
+.drop-zone-icon {
+  width: 64px;
+  height: 64px;
+  color: var(--accent-primary);
+  margin-bottom: 24px;
+}
+
+/* Action Cards */
+.card {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Voice Indicator */
+.voice-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+}
+
+.voice-wave {
+  width: 3px;
+  height: 100%;
+  background: var(--accent-primary);
+  border-radius: 2px;
+  animation: wave 1s ease-in-out infinite;
+}
+
+@keyframes wave {
+
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* Status Badges */
+.badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-blue {
+  background: rgba(0, 122, 255, 0.2);
+  color: #007aff;
+}
+
+.badge-purple {
+  background: rgba(88, 86, 214, 0.2);
+  color: #5856d6;
+}
